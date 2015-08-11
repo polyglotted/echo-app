@@ -3,30 +3,28 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.polyglotted</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>1.2.1</version>
+        <groupId>io.polyglotted</groupId>
+        <artifactId>pg-app-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>io.polyglotted</groupId>
     <artifactId>echo-app</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>Echo App</name>
     <packaging>jar</packaging>
 
     <properties>
-        <launch.strategy>App</launch.strategy>
-        <application.directory>/vol/applications/app</application.directory>
-        <applauncher.version>2.0.0-SNAPSHOT</applauncher.version>
         <slf4j.version>1.7.10</slf4j.version>
-        <log4j.version>1.2.17</log4j.version>
         <netty.version>4.0.30.Final</netty.version>
         <spring.version>3.2.4.RELEASE</spring.version>
         <lombok.version>1.12.4</lombok.version>
-        <docker-maven.version>0.3.1</docker-maven.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>io.polyglotted</groupId>
+            <artifactId>app-launcher</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -59,125 +57,5 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-        <dependency>
-            <groupId>org.polyglotted</groupId>
-            <artifactId>app-launcher</artifactId>
-            <version>${applauncher.version}</version>
-        </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.github.goldin</groupId>
-                <artifactId>copy-maven-plugin</artifactId>
-                <version>0.2.5</version>
-                <executions>
-                    <execution>
-                        <id>prepare-app-archive</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <resources>
-                                <resource>
-                                    <targetPath>${project.build.directory}/app-launcher</targetPath>
-                                    <dependency>
-                                        <groupId>org.polyglotted</groupId>
-                                        <artifactId>app-launcher</artifactId>
-                                        <version>${applauncher.version}</version>
-                                        <type>zip</type>
-                                        <classifier>binary</classifier>
-                                    </dependency>
-                                    <unpack>true</unpack>
-                                    <skipIdentical>true</skipIdentical>
-                                </resource>
-                                <resource>
-                                    <targetPath>${basedir}</targetPath>
-                                    <file>${project.build.directory}/app-launcher/launcher/app.launch</file>
-                                    <destFileName>${project.artifactId}-Main.launch</destFileName>
-                                    <filtering>true</filtering>
-                                    <skipIdentical>true</skipIdentical>
-                                </resource>
-                                <resource>
-                                    <targetPath>${basedir}/.idea/runConfigurations</targetPath>
-                                    <file>${project.build.directory}/app-launcher/launcher/app-idea.xml</file>
-                                    <destFileName>${project.artifactId}-Main.xml</destFileName>
-                                    <filtering>true</filtering>
-                                    <skipIdentical>true</skipIdentical>
-                                </resource>
-                                <resource>
-                                    <targetPath>${project.build.directory}/config</targetPath>
-                                    <directory>${project.build.directory}/app-launcher</directory>
-                                    <includes>
-                                        <include>bin/**</include>
-                                        <include>etc/**</include>
-                                    </includes>
-                                    <preservePath>true</preservePath>
-                                    <filtering>true</filtering>
-                                </resource>
-                                <resource>
-                                    <targetPath>${project.build.directory}/config/etc</targetPath>
-                                    <directory>${basedir}/src/main/config/etc</directory>
-                                    <filtering>true</filtering>
-                                    <failIfNotFound>false</failIfNotFound>
-                                </resource>
-                                <resource>
-                                    <targetPath>${project.build.outputDirectory}/app</targetPath>
-                                    <directory>${basedir}/src/main/app</directory>
-                                    <preservePath>true</preservePath>
-                                    <skipIdentical>true</skipIdentical>
-                                    <failIfNotFound>false</failIfNotFound>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptors>
-                        <descriptor>${project.build.directory}/app-launcher/templates/assembly.xml</descriptor>
-                    </descriptors>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>${docker-maven.version}</version>
-                <configuration>
-                    <imageName>${project.artifactId}:${project.version}</imageName>
-                    <dockerDirectory>${project.build.directory}/app-launcher/docker</dockerDirectory>
-                    <resources>
-                        <resource>
-                            <targetPath>/</targetPath>
-                            <directory>${project.build.directory}</directory>
-                            <include>${project.artifactId}-${project.version}-binary.tar.gz</include>
-                        </resource>
-                    </resources>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-</project>
+ </project>
