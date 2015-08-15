@@ -1,13 +1,26 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2013 polyglotted.org
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
-        <groupId>io.polyglotted</groupId>
-        <artifactId>pg-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <groupId>org.polyglotted</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
     </parent>
-
     <artifactId>echo-app</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>Echo App</name>
@@ -25,17 +38,6 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-        <repository>
-            <id>polyglotted-repository</id>
-            <name>Polyglotted Repository</name>
-            <url>https://nexus.polyglotted.io/content/groups/public/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
     </repositories>
 
     <properties>
@@ -43,12 +45,27 @@
         <netty.version>4.0.30.Final</netty.version>
         <spring.version>3.2.4.RELEASE</spring.version>
         <lombok.version>1.12.4</lombok.version>
+        <appimport.version>1.0.0-SNAPSHOT</appimport.version>
+        <applauncher.version>2.0.0-SNAPSHOT</applauncher.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.polyglotted</groupId>
+                <artifactId>pg-app-import</artifactId>
+                <version>${appimport.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
             <groupId>org.polyglotted</groupId>
             <artifactId>app-launcher</artifactId>
+            <version>${applauncher.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
