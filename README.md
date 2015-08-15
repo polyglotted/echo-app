@@ -1,6 +1,6 @@
 # Echo Application
 
-Simple echo service app that uses the [Polyglotted app launcher](https://github.com/polyglotted/app-launcher) and [Polyglotted App Import](https://github.com/polyglotted/pg-app-import).
+Simple echo service app that uses the [Polyglotted app launcher](https://github.com/polyglotted/app-launcher)
 
 ### Continuous Integration
 
