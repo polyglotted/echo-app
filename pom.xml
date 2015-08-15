@@ -13,6 +13,31 @@
     <name>Echo App</name>
     <packaging>jar</packaging>
 
+    <repositories>
+        <repository>
+            <id>sonatype-repository</id>
+            <name>Sonatype Repository</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>polyglotted-repository</id>
+            <name>Polyglotted Repository</name>
+            <url>https://nexus.polyglotted.io/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <properties>
         <slf4j.version>1.7.10</slf4j.version>
         <netty.version>4.0.30.Final</netty.version>
