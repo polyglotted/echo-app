@@ -207,7 +207,7 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>${docker-maven.version}</version>
                 <configuration>
-                    <imageName>${project.artifactId}:${project.version}</imageName>
+                    <imageName>polyglotted/${project.artifactId}:${project.version}</imageName>
                     <dockerDirectory>${project.build.directory}/app-launcher/docker</dockerDirectory>
                     <resources>
                         <resource>
