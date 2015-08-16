@@ -11,9 +11,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import io.netty.handler.ssl.SslContext;
-import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.util.SelfSignedCertificate;
 import io.polyglotted.app.core.Gaveti;
 import io.polyglotted.app.core.Overrides;
 import org.slf4j.Logger;
@@ -43,7 +40,7 @@ public class EchoServer {
 
     public void start() {
         artifactId = gaveti.artifactId();
-        port = overrides.integer("port").orSome(8007);
+        port = overrides.integer("port").orElse(8007);
 
         // Configure the server.
         bossGroup = new NioEventLoopGroup(1);
