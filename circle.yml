@@ -8,7 +8,7 @@ deployment:
   nexus:
     branch: master
     commands:
-      - mvn -settings=.ci-settings.xml deploy
+      - mvn --settings .ci-settings.xml deploy
   hub:
     branch: master
     commands:
