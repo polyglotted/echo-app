@@ -4,4 +4,4 @@ Simple echo service app that uses the [Polyglotted app launcher](https://github.
 
 ### Continuous Integration
 
-[ ![Codeship Status for polyglotted/echo-app](https://codeship.com/projects/f0c62920-24cd-0133-ecc5-72f090cba113/status?branch=master)](https://codeship.com/projects/96869)
+[![Circle CI](https://circleci.com/gh/polyglotted/echo-app.svg?style=svg)](https://circleci.com/gh/polyglotted/echo-app)
