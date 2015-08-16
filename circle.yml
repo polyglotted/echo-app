@@ -4,6 +4,4 @@ machine:
   java:
     version:
       oraclejdk8
-notify:
-  webhooks:
-    - url: https://hooks.slack.com/services/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
+      
