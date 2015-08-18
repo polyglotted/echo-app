@@ -43,8 +43,9 @@
     <properties>
         <slf4j.version>1.7.10</slf4j.version>
         <netty.version>4.0.30.Final</netty.version>
-        <spring.version>3.2.4.RELEASE</spring.version>
+        <spring.version>4.2.0.RELEASE</spring.version>
         <lombok.version>1.12.4</lombok.version>
+        <guava.version>16.0.1</guava.version>
 
         <launch.strategy>App</launch.strategy>
         <application.directory>/vol/applications/app</application.directory>
@@ -57,6 +58,11 @@
             <groupId>org.polyglotted</groupId>
             <artifactId>app-launcher</artifactId>
             <version>${applauncher.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -146,6 +152,26 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <id>copy-docker-config</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/docker</outputDirectory>
+                            <encoding>UTF-8</encoding>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}/app-launcher/docker</directory>
+                                    <includes>
+                                        <include>Dockerfile</include>
+                                    </includes>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>copy-launcher</id>
                         <phase>generate-sources</phase>
                         <goals>
@@ -208,7 +234,7 @@
                 <version>${docker-maven.version}</version>
                 <configuration>
                     <imageName>polyglotted/${project.artifactId}:${project.version}</imageName>
-                    <dockerDirectory>${project.build.directory}/app-launcher/docker</dockerDirectory>
+                    <dockerDirectory>${project.build.directory}/docker</dockerDirectory>
                     <resources>
                         <resource>
                             <targetPath>/</targetPath>

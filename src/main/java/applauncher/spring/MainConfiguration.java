@@ -1,4 +1,4 @@
-package app.spring;
+package applauncher.spring;
 
 import io.polyglotted.echoapp.EchoServer;
 import org.springframework.context.annotation.Bean;
