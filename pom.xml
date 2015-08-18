@@ -22,7 +22,7 @@
         <version>2.0.0</version>
     </parent>
     <artifactId>echo-app</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>Echo App</name>
     <packaging>jar</packaging>
 
@@ -30,7 +30,7 @@
         <url>https://github.com/polyglotted/echo-app</url>
         <connection>scm:git:ssh://github.com/polyglotted/echo-app.git</connection>
         <developerConnection>scm:git:git+ssh://git@github.com/polyglotted/echo-app.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>echo-app-1.0.0</tag>
     </scm>
     <repositories>
         <repository>
