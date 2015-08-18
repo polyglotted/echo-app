@@ -26,6 +26,12 @@
     <name>Echo App</name>
     <packaging>jar</packaging>
 
+    <scm>
+        <url>https://github.com/polyglotted/echo-app</url>
+        <connection>scm:git:ssh://github.com/polyglotted/echo-app.git</connection>
+        <developerConnection>scm:git:git+ssh://git@github.com/polyglotted/echo-app.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
     <repositories>
         <repository>
             <id>sonatype-repository</id>
