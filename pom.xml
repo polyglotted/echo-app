@@ -114,7 +114,7 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>org.polyglotted</groupId>
+                                    <groupId>io.polyglotted</groupId>
                                     <artifactId>app-launcher</artifactId>
                                     <version>${applauncher.version}</version>
                                     <type>zip</type>
