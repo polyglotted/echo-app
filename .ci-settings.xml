@@ -11,11 +11,6 @@
             <username>${NEXUS_USER}</username>
             <password>${NEXUS_PASS}</password>
         </server>
-        <server>
-            <id>docker.io</id>
-            <username>${DOCKER_USER}</username>
-            <password>${DOCKER_PASS}</password>
-        </server>
     </servers>
     <profiles>
         <profile>

@@ -58,8 +58,8 @@
 
         <launch.strategy>App</launch.strategy>
         <application.directory>/vol/applications/app</application.directory>
-        <docker-maven.version>0.3.1</docker-maven.version>
-        <applauncher.version>2.0.2-SNAPSHOT</applauncher.version>
+        <docker-maven.version>0.13.6</docker-maven.version>
+        <applauncher.version>2.0.2</applauncher.version>
         <app.port>8008</app.port>
     </properties>
 
@@ -275,7 +275,7 @@
             <plugin>
                 <groupId>org.jolokia</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-                <version>0.13.6</version>
+                <version>${docker-maven.version}</version>
                 <configuration>
                     <logDate>default</logDate>
                     <autoPull>true</autoPull>
@@ -311,7 +311,7 @@
                                     <time>10000</time>
                                 </wait>
                                 <log>
-                                    <prefix>echo-server</prefix>
+                                    <prefix>app-launcher</prefix>
                                     <color>cyan</color>
                                 </log>
                             </run>
