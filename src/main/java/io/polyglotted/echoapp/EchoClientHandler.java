@@ -7,6 +7,8 @@ import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Handler implementation for the echo client.  It initiates the ping-pong
  * traffic between the echo client and server by sending the first message to
@@ -22,7 +24,7 @@ public class EchoClientHandler extends ChannelHandlerAdapter {
      * Creates a client-side handler.
      */
     public EchoClientHandler() {
-        firstMessage = Unpooled.buffer(EchoClient.SIZE);
+        firstMessage = Unpooled.buffer(256);
         for (int i = 0; i < firstMessage.capacity(); i ++) {
             firstMessage.writeByte((byte) i);
         }
@@ -30,15 +32,15 @@ public class EchoClientHandler extends ChannelHandlerAdapter {
     }
 
     public void channelActive(ChannelHandlerContext ctx) {
+        logger.info("writing first message");
         ctx.writeAndFlush(firstMessage);
     }
 
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        ctx.write(msg);
     }
 
     public void channelReadComplete(ChannelHandlerContext ctx) {
-        ctx.flush();
+        ctx.close().awaitUninterruptibly(30, TimeUnit.SECONDS);
     }
 
     @Override
