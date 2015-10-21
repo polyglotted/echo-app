@@ -6,9 +6,17 @@ machine:
       oraclejdk8
 dependencies:
   override:
-    - mvn --settings .ci-settings.xml -U -DskipTests -Dassembly.skipAssembly=true install
+    - mvn --settings .ci-settings.xml -U -Ddocker.skip=true -DskipTests -Dassembly.skipAssembly=true install
+test:
+  override:
+    - mvn -Dassembly.skipAssembly=true post-integration-test
 deployment:
   nexus:
     branch: master
     commands:
-      - mvn --settings .ci-settings.xml -DskipTests deploy
+      - mvn --settings .ci-settings.xml -Ddocker.skip=true -DskipTests deploy
+  hub:
+    branch: master
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker push polyglotted/echo-app
