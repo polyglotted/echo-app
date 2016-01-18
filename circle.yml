@@ -14,4 +14,4 @@ deployment:
   nexus:
     branch: master
     commands:
-      - mvn --settings .ci-settings.xml -Ddocker.skip=true -DskipTests deploy
+      - mvn --settings .ci-settings.xml -DskipITs deploy
