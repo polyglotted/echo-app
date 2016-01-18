@@ -15,5 +15,3 @@ deployment:
     branch: master
     commands:
       - mvn --settings .ci-settings.xml -Ddocker.skip=true -DskipTests deploy
-      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker push polyglotted/echo-app

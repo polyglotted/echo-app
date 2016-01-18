@@ -56,11 +56,11 @@
         <guava.version>18.0</guava.version>
         <testng.version>6.9.6</testng.version>
 
-        <launch.strategy>App</launch.strategy>
-        <application.directory>/vol/applications/app</application.directory>
-        <docker-maven.version>0.13.6</docker-maven.version>
-        <applauncher.version>2.0.2</applauncher.version>
+        <docker-maven.version>0.13.7</docker-maven.version>
+        <applauncher.version>2.0.6</applauncher.version>
+        <app.directory>/app/current</app.directory>
         <app.port>8008</app.port>
+        <docker.wait>30000</docker.wait>
     </properties>
 
     <dependencies>
@@ -139,30 +139,6 @@
         </resources>
         <plugins>
             <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.19</version>
-                <executions>
-                    <execution>
-                        <id>integration-test</id>
-                        <goals>
-                            <goal>integration-test</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>verify</id>
-                        <goals>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <systemPropertyVariables>
-                        <app.host>${docker.host.address}</app.host>
-                        <app.port>${jetty.port}</app.port>
-                    </systemPropertyVariables>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>2.10</version>
@@ -206,7 +182,6 @@
                                     <directory>${project.build.directory}/app-launcher</directory>
                                     <includes>
                                         <include>bin/**</include>
-                                        <include>etc/**</include>
                                     </includes>
                                     <filtering>true</filtering>
                                 </resource>
@@ -220,7 +195,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/.idea/runConfigurations</outputDirectory>
+                            <outputDirectory>${session.executionRootDirectory}/.idea/runConfigurations</outputDirectory>
                             <encoding>UTF-8</encoding>
                             <resources>
                                 <resource>
@@ -233,37 +208,20 @@
                             </resources>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>override-with-src-etc</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/config/etc</outputDirectory>
-                            <encoding>UTF-8</encoding>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/src/main/config/etc</directory>
-                                    <filtering>true</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <descriptors>
-                        <descriptor>${project.build.directory}/app-launcher/templates/assembly.xml</descriptor>
-                    </descriptors>
-                </configuration>
                 <executions>
                     <execution>
-                        <id>make-assembly</id>
+                        <id>make-tarzip</id>
+                        <configuration>
+                            <attach>false</attach>
+                            <descriptors>
+                                <descriptor>${project.build.directory}/app-launcher/templates/assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
@@ -271,7 +229,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.jolokia</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
@@ -297,18 +254,27 @@
                                 </ports>
                                 <workdir>/app</workdir>
                                 <runCmds>
-                                    <cmd>ln -s ${project.artifactId} current</cmd>
+                                    <run>ln -s ${project.artifactId}-${project.version} ${project.artifactId}</run>
                                 </runCmds>
-                                <cmd>/app/current/bin/appservice start</cmd>
+                                <cmd>/app/${project.artifactId}/bin/appservice run</cmd>
                             </build>
 
                             <run>
+                                <env>
+                                    <ENVIRONMENT>integration-test</ENVIRONMENT>
+                                </env>
+                                <volumes>
+                                    <bind>
+                                        <volume>${app.directory}/config:/opt/${project.groupId}/config:ro</volume>
+                                        <volume>${app.directory}/logs:/opt/${project.groupId}/logs</volume>
+                                        <volume>${app.directory}/data:/opt/${project.groupId}/data</volume>
+                                    </bind>
+                                </volumes>
                                 <ports>
-                                    <port>jetty.port:${app.port}</port>
+                                    <port>docker.port:${app.port}</port>
                                 </ports>
                                 <wait>
-                                    <log>SpringServer - Server started</log>
-                                    <time>10000</time>
+                                    <time>${docker.wait}</time>
                                 </wait>
                                 <log>
                                     <prefix>app-launcher</prefix>
@@ -334,9 +300,39 @@
                             <goal>stop</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>publish</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
-
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.19</version>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>verify</id>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <systemPropertyVariables>
+                        <app.host>${docker.host.address}</app.host>
+                        <app.port>${docker.port}</app.port>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
