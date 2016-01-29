@@ -57,7 +57,7 @@
         <testng.version>6.9.6</testng.version>
 
         <docker-maven.version>0.13.7</docker-maven.version>
-        <applauncher.version>2.0.6</applauncher.version>
+        <applauncher.version>2.0.7</applauncher.version>
         <app.directory>/app/current</app.directory>
         <app.port>8008</app.port>
         <docker.wait>30000</docker.wait>
@@ -274,6 +274,7 @@
                                     <port>docker.port:${app.port}</port>
                                 </ports>
                                 <wait>
+                                    <log>SpringServer - Server started</log>
                                     <time>${docker.wait}</time>
                                 </wait>
                                 <log>
